@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "419c4ccb-170a-4a17-a5aa-8d3d8652aab7",
+		"name": "Silkin_HW16",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26908883"
+	},
+	"item": [
+		{
+			"name": "GetAllCities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let count = pm.response.json().data.getAllCities.length;",
+							"//console.log(count);",
+							"",
+							"pm.collectionVariables.set('randomNumb',Math.floor(Math.random() *  count));",
+							"let randomObj = pm.collectionVariables.get('randomNumb');",
+							"//console.log(randomObj);",
+							"",
+							"let jsonData = pm.response.json();",
+							"",
+							"//random ids",
+							"pm.collectionVariables.set('firstId', jsonData.data.getAllCities[randomObj].id);",
+							"let getIdFirst = pm.collectionVariables.get('firstId');",
+							"console.log(getIdFirst);",
+							"",
+							"pm.collectionVariables.set('randomNumbTwo',Math.floor(Math.random() *  count));",
+							"let randomObjTw0 = pm.collectionVariables.get('randomNumbTwo');",
+							"",
+							"pm.collectionVariables.set('secondId', jsonData.data.getAllCities[randomObjTw0].id);",
+							"let getIdSecond = pm.collectionVariables.get('secondId');",
+							"console.log(getIdSecond);",
+							"",
+							"pm.collectionVariables.set('randomNumbThree',Math.floor(Math.random() *  count));",
+							"let randomObjThree = pm.collectionVariables.get('randomNumbThree');",
+							"",
+							"pm.collectionVariables.set('thirdId', jsonData.data.getAllCities[randomObjThree].id);",
+							"let getIdThird = pm.collectionVariables.get('thirdId');",
+							"console.log(getIdThird);",
+							"",
+							"pm.collectionVariables.set('randomNumbFour',Math.floor(Math.random() *  count));",
+							"let randomObjFour = pm.collectionVariables.get('randomNumbFour');",
+							"",
+							"pm.collectionVariables.set('fourthId', jsonData.data.getAllCities[randomObjFour].id);",
+							"let getIdFourth = pm.collectionVariables.get('fourthId');",
+							"console.log(getIdFourth);",
+							"",
+							"//max and min between random ids",
+							"pm.collectionVariables.set('maxID',Math.max(getIdFirst,getIdSecond,getIdThird,getIdFourth));",
+							"let maxOfId = pm.collectionVariables.get('maxID');",
+							"console.log(maxOfId);",
+							"",
+							"pm.collectionVariables.set('minID',Math.min(getIdFirst,getIdSecond,getIdThird,getIdFourth));",
+							"let minOfId = pm.collectionVariables.get('minID');",
+							"console.log(minOfId);",
+							"",
+							"//avg square",
+							"let cities = jsonData.data.getAllCities;",
+							"let sumOfSquare = cities.reduce((sum, city)=>sum+city.square,0);",
+							"console.log(sumOfSquare);",
+							"pm.collectionVariables.set('averageSquare',sumOfSquare/count);",
+							"let getAverageSquare = pm.collectionVariables.get('averageSquare');",
+							"console.log(getAverageSquare);",
+							"",
+							"pm.test('Status code is 200 ', function(){",
+							"    pm.response.to.have.status(200)",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{\n  getAllCities{\n    id\n    name\n\tsquare\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCitiesDescriptionById",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.get('firstId');",
+							"//console.log(getIdFirst);",
+							"pm.collectionVariables.get('secondId');",
+							"//console.log(getIdSecond);",
+							"pm.collectionVariables.get('thirdId');",
+							"//console.log(getIdThird);",
+							"pm.collectionVariables.get('fourthId');",
+							"//console.log(getIdFourth);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200 ', function(){",
+							"    pm.response.to.have.status(200)",
+							"});",
+							"let jsonData = pm.response.json();",
+							"pm.test('response has city1,city2,city3,city4 ', function(){",
+							"    pm.expect(jsonData.data).to.have.keys('city1','city2','city3','city4');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query($Id1:ID!,$Id2:ID!,$Id3:ID!,$Id4:ID!){\n    city1:getCityDescription(id:$Id1),\n    city2:getCityDescription(id:$Id2),\n    city3:getCityDescription(id:$Id3),\n    city4:getCityDescription(id:$Id4)\n}",
+						"variables": "{\n  \"Id1\":{{firstId}},\n  \"Id2\":{{secondId}},\n  \"Id3\":{{thirdId}},\n  \"Id4\":{{fourthId}}\n}"
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCiriesByRangeIds",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.get('maxID');",
+							"pm.collectionVariables.get('minID');",
+							"//",
+							"pm.test('Status code is 200 ', function(){",
+							"    pm.response.to.have.status(200)",
+							"});",
+							"let jsonData = pm.response.json();",
+							"pm.test('response has property getCityByRangeId', function(){",
+							"    pm.expect(jsonData.data).to.have.key('getCityByRangeId');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query($minId: Int!, $maxId: Int!){\n  getCityByRangeId(filter:{minId:$minId, maxId:$maxId}) {\n    id\n    name\n    square\n  }\n}",
+						"variables": "{\n    \"minId\":{{minID}},\n    \"maxId\":{{maxID}}\n}"
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let squareNum = pm.collectionVariables.get('averageSquare');",
+							"console.log(squareNum);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200 ', function(){",
+							"    pm.response.to.have.status(200)",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"let jsonData = pm.response.json();",
+							"",
+							"pm.test('square is number', function() {",
+							"    for(let i=0; i<jsonData.length; i++){",
+							"    pm.expect(jsonData[i].square).to.be.a('number')",
+							"}",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  addCity(name:\"{{$randomCity}}\",square:{{averageSquare}},description:\"Best\"){\n    id\n    name\n    square\n    ... on City{\n      description\n    }\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "randomNumb",
+			"value": ""
+		},
+		{
+			"key": "firstId",
+			"value": ""
+		},
+		{
+			"key": "randomNumbTwo",
+			"value": ""
+		},
+		{
+			"key": "secondId",
+			"value": ""
+		},
+		{
+			"key": "randomNumbThree",
+			"value": ""
+		},
+		{
+			"key": "thirdId",
+			"value": ""
+		},
+		{
+			"key": "randomNumbFour",
+			"value": ""
+		},
+		{
+			"key": "fourthId",
+			"value": ""
+		},
+		{
+			"key": "maxID",
+			"value": ""
+		},
+		{
+			"key": "minID",
+			"value": ""
+		},
+		{
+			"key": "averageSquare",
+			"value": ""
+		}
+	]
+}

@@ -195,7 +195,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "CityRandNameAvgSquare",
 			"event": [
 				{
 					"listen": "prerequest",
